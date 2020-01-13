@@ -13,7 +13,7 @@
 import UIKit
 
 protocol ListMoviesDisplayLogic: class {
-  func displaySomething(viewModel: ListMovies.Models.ViewModel)
+    func showListMovies(viewModel: ListMovies.Models.ViewModel)
 }
 
 class ListMoviesViewController: UIViewController {
@@ -26,40 +26,44 @@ class ListMoviesViewController: UIViewController {
         }
     }
     
-    
     lazy var worker = ListMoviesWorker()
-    
+    lazy var viewModel = MoviesViewModel()
     lazy var presenter = ListMoviesPresenter(viewController: self)
     
     lazy var interactor: ListMoviesBusinessLogic = ListMoviesInteractor(presenter: presenter, worker: worker)
-
-  
-  // MARK: View lifecycle
-  
-  override func viewDidLoad(){
-    super.viewDidLoad()
     
-    interactor.doSomething()
-  }
+    override func viewDidLoad(){
+        super.viewDidLoad()
+        
+        interactor.getListMovies()
+    }
 }
 
 extension ListMoviesViewController: ListMoviesDisplayLogic {
-    func displaySomething(viewModel: ListMovies.Models.ViewModel) {
-        
+    func showListMovies(viewModel: ListMovies.Models.ViewModel) {
+        self.viewModel = viewModel.moviesViewModel
+        self.listMovieTableView.reloadData()
     }
 }
 
 extension ListMoviesViewController: UITableViewDataSource {
-   
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return self.viewModel.numberOfSections
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+        return self.viewModel.numberOfRows
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        return UITableViewCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        cell.textLabel?.text = self.viewModel.title
+        
+        return cell
     }
-
+    
 }
 
 extension ListMoviesViewController: UITableViewDelegate {

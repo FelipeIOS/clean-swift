@@ -13,9 +13,9 @@
 import UIKit
 
 protocol ListMoviesPresentationLogic{
-    func presentSomething(response: ListMovies.Models.Response)
+    
     func showErrorScreen(error: Error?)
-    func displayMovies(movies: Movie)
+    func displayMovies(movies: ListMovies.Models.Response)
 }
 
 class ListMoviesPresenter: ListMoviesPresentationLogic {
@@ -25,18 +25,45 @@ class ListMoviesPresenter: ListMoviesPresentationLogic {
         self.viewController = viewController
     }
     
-    // MARK: Do something
-    func presentSomething(response: ListMovies.Models.Response){
-        
-        //let viewModel = ListMovies.Something.ViewModel()
-        //viewController?.displaySomething(viewModel: viewModel)
-    }
-    
+
     func showErrorScreen(error: Error?) {
         
     }
     
-    func displayMovies(movies: Movie) {
+    func displayMovies(movies: ListMovies.Models.Response) {
         
+        var viewModel = ListMovies.Models.ViewModel()
+        viewModel.moviesViewModel = MoviesViewModel(listMovies: movies.movies)
+        self.viewController.showListMovies(viewModel: viewModel)
     }
 }
+
+
+
+class MoviesViewModel {
+    
+    private var listMovies: Movie
+    
+    init(listMovies: Movie) {
+        
+        self.listMovies = listMovies
+    }
+    
+    init() {
+        self.listMovies = []
+    }
+    
+    var numberOfRows: Int {
+        return self.listMovies.count
+    }
+    
+    var numberOfSections: Int {
+        return 1
+    }
+    
+    var title: String {
+        return self.listMovies.first?.title ?? ""
+    }
+    
+}
+

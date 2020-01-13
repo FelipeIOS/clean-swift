@@ -13,7 +13,7 @@
 import UIKit
 
 protocol ListMoviesBusinessLogic {
-  func doSomething()
+  func getListMovies()
 }
 
 class ListMoviesInteractor: ListMoviesBusinessLogic {
@@ -28,14 +28,16 @@ class ListMoviesInteractor: ListMoviesBusinessLogic {
         self.worker = worker
     }
   
-  func doSomething(){
+  func getListMovies(){
     worker.doSomeWork(completion: { movie, error in
         if let err = error {
             self.presenter.showErrorScreen(error: err)
         } else {
             if let movie = movie {
+                var reponse = ListMovies.Models.Response()
+                reponse.movies = movie
                 self.movies = movie
-                self.presenter.displayMovies(movies: movie)
+                self.presenter.displayMovies(movies: reponse)
             } else {
                 self.presenter.showErrorScreen(error: nil)
             }

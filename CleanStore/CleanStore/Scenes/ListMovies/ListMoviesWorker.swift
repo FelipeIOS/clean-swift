@@ -27,12 +27,19 @@ class ListMoviesWorker{
             print(response)
             
             if let err = error{
-                completion(nil,err)
+                DispatchQueue.main.async {
+                    completion(nil,err)
+                }
+                
             }else{
                 do {
                     
                     let movie = try JSONDecoder().decode(Movie.self, from: data ?? Data()) // Decoding our data
-                    completion(movie,nil)
+                    
+                    DispatchQueue.main.async {
+                           completion(movie,nil)
+                    }
+                    
 
                 } catch {
                     

@@ -24,10 +24,11 @@ enum ListMovies
     }
     struct Response
     {
-        var movies:Movie?
+        var movies:Movie = []
     }
     struct ViewModel
     {
+        var moviesViewModel = MoviesViewModel()
     }
   }
 }
