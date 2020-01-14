@@ -22,7 +22,7 @@ class ListMoviesViewController: UIViewController {
     @IBOutlet weak var listMovieTableView: UITableView!
     
     lazy var worker = ListMoviesWorker()
-    lazy var viewModel = MoviesViewModel()
+    lazy var viewModel = ListMovies.Models.ViewModel()
     lazy var presenter = ListMoviesPresenter(viewController: self)
     
     lazy var interactor: ListMoviesBusinessLogic = ListMoviesInteractor(presenter: presenter, worker: worker)
@@ -39,7 +39,7 @@ extension ListMoviesViewController: ListMoviesDisplayLogic {
    
     func showListMovies(viewModel: ListMovies.Models.ViewModel) {
         
-        self.viewModel = viewModel.moviesViewModel
+        self.viewModel = viewModel
         listMovieTableView.delegate = self
         listMovieTableView.dataSource = self
         

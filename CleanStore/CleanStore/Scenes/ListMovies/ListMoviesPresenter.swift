@@ -32,36 +32,8 @@ class ListMoviesPresenter: ListMoviesPresentationLogic {
     
     func displayMovies(movies: ListMovies.Models.Response) {
         
-        let viewModel = ListMovies.Models.ViewModel(moviesViewModel: MoviesViewModel(response: movies))
+        let viewModel = ListMovies.Models.ViewModel(response: movies)
         self.viewController.showListMovies(viewModel: viewModel)
-    }
-}
-
-class MoviesViewModel {
-    
-    private var listMovies: Movie
-
-    
-    init(response: ListMovies.Models.Response) {
-        
-        self.listMovies = response.movies
-    }
-    
-    init() {
-        self.listMovies = []
-    }
-    
-    var numberOfRows: Int {
-        return self.listMovies.count
-    }
-    
-    var numberOfSections: Int {
-        return 1
-    }
-   
-    func getMovieElement(at index: Int) -> MovieElement{
-        
-        return self.listMovies[index]
     }
 }
 

@@ -28,7 +28,29 @@ enum ListMovies
     }
     struct ViewModel
     {
-        var moviesViewModel = MoviesViewModel()
+         private var listMovies: Movie
+
+         init(response: ListMovies.Models.Response) {
+             
+             self.listMovies = response.movies
+         }
+         
+         init() {
+             self.listMovies = []
+         }
+         
+         var numberOfRows: Int {
+             return self.listMovies.count
+         }
+         
+         var numberOfSections: Int {
+             return 1
+         }
+        
+         func getMovieElement(at index: Int) -> MovieElement{
+             
+             return self.listMovies[index]
+         }
     }
   }
 }
