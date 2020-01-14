@@ -19,12 +19,7 @@ protocol ListMoviesDisplayLogic: class {
 class ListMoviesViewController: UIViewController {
     
     
-    @IBOutlet weak var listMovieTableView: UITableView! {
-        didSet {
-            listMovieTableView.delegate = self
-            listMovieTableView.dataSource = self
-        }
-    }
+    @IBOutlet weak var listMovieTableView: UITableView!
     
     lazy var worker = ListMoviesWorker()
     lazy var viewModel = MoviesViewModel()
@@ -34,15 +29,21 @@ class ListMoviesViewController: UIViewController {
     
     override func viewDidLoad(){
         super.viewDidLoad()
-        
+    
+        self.listMovieTableView.register(UINib(nibName: "MovieCell", bundle: Bundle.main), forCellReuseIdentifier: "cell")
         interactor.getListMovies()
     }
 }
 
 extension ListMoviesViewController: ListMoviesDisplayLogic {
+   
     func showListMovies(viewModel: ListMovies.Models.ViewModel) {
+        
         self.viewModel = viewModel.moviesViewModel
-        self.listMovieTableView.reloadData()
+        listMovieTableView.delegate = self
+        listMovieTableView.dataSource = self
+        
+        listMovieTableView.reloadData()
     }
 }
 
@@ -58,10 +59,11 @@ extension ListMoviesViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = self.viewModel.title
+        let cell: MovieCell? = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? MovieCell
         
-        return cell
+        cell?.setup(movie: self.viewModel.getMovieElement(at: indexPath.row))
+        
+        return cell ?? UITableViewCell()
     }
     
 }

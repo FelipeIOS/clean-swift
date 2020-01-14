@@ -19,12 +19,12 @@ protocol ListMoviesPresentationLogic{
 }
 
 class ListMoviesPresenter: ListMoviesPresentationLogic {
-    var viewController: ListMoviesDisplayLogic
+    
+    private var viewController: ListMoviesDisplayLogic
     
     init(viewController: ListMoviesDisplayLogic) {
         self.viewController = viewController
     }
-    
 
     func showErrorScreen(error: Error?) {
         
@@ -32,21 +32,19 @@ class ListMoviesPresenter: ListMoviesPresentationLogic {
     
     func displayMovies(movies: ListMovies.Models.Response) {
         
-        var viewModel = ListMovies.Models.ViewModel()
-        viewModel.moviesViewModel = MoviesViewModel(listMovies: movies.movies)
+        let viewModel = ListMovies.Models.ViewModel(moviesViewModel: MoviesViewModel(response: movies))
         self.viewController.showListMovies(viewModel: viewModel)
     }
 }
 
-
-
 class MoviesViewModel {
     
     private var listMovies: Movie
+
     
-    init(listMovies: Movie) {
+    init(response: ListMovies.Models.Response) {
         
-        self.listMovies = listMovies
+        self.listMovies = response.movies
     }
     
     init() {
@@ -60,10 +58,10 @@ class MoviesViewModel {
     var numberOfSections: Int {
         return 1
     }
-    
-    var title: String {
-        return self.listMovies.first?.title ?? ""
+   
+    func getMovieElement(at index: Int) -> MovieElement{
+        
+        return self.listMovies[index]
     }
-    
 }
 
